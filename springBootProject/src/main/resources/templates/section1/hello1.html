@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>hello1.html</title>
+</head>
+<body>
+	<h1>타임리프 사용하기</h1>
+	<p th:text="|이름 : ${myname}(문자를 함께 사용하기 위해 파이프라인 사용)|">여기는 X</p>
+	<p th:text="${myscore}">여기는 X</p>
+	
+	<h2>Board 정보</h2>
+	<p th:text="${board.title}">
+	<p th:text="${board.content}">
+	<p th:text="${board.writer}">
+	<p th:text="${'<h1>' + board.writer + '</h1>'}">HTML 태그가 그대로 출력</p>
+	<p th:utext="${'<h1>' + board.writer + '</h1>'}">HTML 태그 적용됨</p>
+</body>
+</html>

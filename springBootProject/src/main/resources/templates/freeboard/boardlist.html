@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>boardlist.html</title>
+<style type="text/css">
+#container {
+	border: 1px dotted black;
+	margin: 0 auto;
+	width: 80%;
+	text-align: center;
+}
+
+table {
+	margin: 0 auto;
+}
+
+table, tr, td {
+	border: 1px solid black;
+	border-collapse: collapse;
+}
+
+td {
+	padding: 5px;
+}
+
+table tr:first-child {
+	text-align: center;
+	font-weight: bold;
+	background-color: #e9e9e9;
+}
+
+.myclass1 {
+	background-color: lightgreen;
+}
+
+.myclass2 {
+	color: red;
+}
+</style>
+</head>
+<body>
+	<div id="container">
+		<h1>FreeBoard 목록</h1>
+		<table>
+			<tr>
+				<td>index</td>
+				<td>count</td>
+				<td>번호</td>
+				<td>제목</td>
+				<td>내용</td>
+				<td>작성자</td>
+				<td>등록일</td>
+				<td>수정일</td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr th:each="board, iterStatus:${boardlist}"
+				th:class="${iterStatus.odd}?'myclass1'"
+				th:classappend="${iterStatus.first or iterStatus.last}?'myclass2'"
+				th:with="target1='user1', target2='user2'">
+				<td>[[${iterStatus.index}]]</td>
+				<td>[[${iterStatus.count}]]...[[${iterStatus.size}]]건...[[${iterStatus.first}]]</td>
+				<td th:text="${board.bno}"></td>
+				<td>[[${board.title}]]</td>
+				<td>[[${board.content}]]</td>
+				<td>[[${board.writer}]]</td>
+				<td>[[${#dates.format(board.regdate, 'yyyy-MM-dd')}]]</td>
+				<td>[[${board.updatedate}]]</td>
+				<td>
+					<button th:if="${board.writer==target1}">수정</button>
+					<button th:unless="${board.writer==target1}">View</button>
+				</td>
+				<td>
+					<p th:text="${board.writer==target2?'주인':'손님'}">user2이면 주인, 그렇지 않으면 손님</p>
+				</td>
+			</tr>
+		</table>
+	</div>
+</body>
+</html>
