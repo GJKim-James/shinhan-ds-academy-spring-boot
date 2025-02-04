@@ -57,10 +57,10 @@ public class OneToOneTest {
 				.phone(newPhone)
 				.build();
 		
-		phoneRepo.save(phone);
+		userRepo.save(user);
 	}
 	
-	// 부 테이블(tbl_user2)을 이용해서 주 테이블(tbl_usercellphone2)에 insert
+	// 부 테이블(tbl_usercellphone2)을 이용해서 주 테이블(tbl_user2)에 insert
 //	@Test
 	void f2() {
 		UserEntity2 user = UserEntity2.builder()
@@ -74,11 +74,10 @@ public class OneToOneTest {
 				.user(user)
 				.build();
 		
-		userRepo2.save(user);
 		phoneRepo2.save(phone);
 	}
 	
-	// 부 테이블에서 주의 키를 식별자로 사용하기
+	// 부 테이블(tbl_usercellphone3)에서 주 테이블(tbl_user3)의 키를 식별자로 사용하기
 	@Test
 	void f3() {
 		UserCellPhoneEntity3 phone = UserCellPhoneEntity3.builder()

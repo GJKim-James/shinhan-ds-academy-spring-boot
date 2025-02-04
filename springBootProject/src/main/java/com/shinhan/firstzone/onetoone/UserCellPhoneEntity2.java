@@ -1,5 +1,6 @@
 package com.shinhan.firstzone.onetoone;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,7 +31,7 @@ public class UserCellPhoneEntity2 {
 	String model;
 	
 	// 부 테이블에서 비식별자로 참조하기
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_id")
 	UserEntity2 user;
 
