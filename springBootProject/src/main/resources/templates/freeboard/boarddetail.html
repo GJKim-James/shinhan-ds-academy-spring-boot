@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>boardlist.html</title>
+<style type="text/css">
+#container {
+	border: 1px dotted black;
+	margin: 0 auto;
+	width: 80%;
+	text-align: center;
+}
+</style>
+</head>
+<body>
+	<th:block th:replace="~{/layout/basicLayout :: setContent(~{this::content2})}">
+		<th:block th:fragment="content2">
+			<div id="container">
+				<h1>Board 상세보기</h1>
+				bno : <input type="number" th:value="${board.bno}"><br>
+				title : <input type="text" th:value="${board.title}"><br>
+				content : <input type="text" th:value="${board.content}"><br>
+				writer : <input type="text" th:value="${board.writer}"><br>
+				regdate : <input type="text" th:value="${board.regdate}"><br>
+				updatedate : <input type="text" th:value="${board.updatedate}">
+			</div>
+		</th:block>
+	</th:block>
+</body>
+</html>

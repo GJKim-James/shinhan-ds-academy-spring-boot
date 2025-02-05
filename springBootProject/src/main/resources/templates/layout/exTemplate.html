@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<th:block th:replace="~{/layout/exLayout2 :: setContent(~{this::content2})}">
+
+   <th:block th:fragment = "content2">
+      <h1>예제</h1>
+      <p>이 부분이 layout에 content로 들어감 </p>
+   </th:block>
+
+</th:block>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>list.html</title>
+</head>
+<body>
+	<th:block th:replace="~{/layout/basicLayout :: setContent(~{this::content2})}">
+		<th:block th:fragment="content2">
+			<div class="container-fluid text-center">
+				<h1>WebBoard 목록</h1>
+				<table class="table table-striped">
+					<tr>
+						<td>게시글 번호</td>
+						<td>작성자</td>
+						<td>제목</td>
+						<td>내용</td>
+						<td>작성일</td>
+						<td>수정일</td>
+					</tr>
+					<tr th:each="board:${boardlist}">
+						<td>
+							<a th:href="@{/webboard/detail(bno=${board.bno})}" th:text="'@RequestParam 이용 : ' + ${board.bno}"></a>
+							/
+							<a th:href="@{/webboard/detail2/{bno}(bno=${board.bno})}" th:text="'@PathVariable 이용 : ' + ${board.bno}"></a>
+						</td> <!-- 인라인 스타일 -->
+						<td>[[${board.writer.mname}]]</td>
+						<td>[[${board.title}]]</td>
+						<td>[[${board.content}]]</td>
+						<td>[[${#dates.format(board.regdate, 'yyyy-MM-dd HH:mm:ss')}]]</td> <!-- HH : 24시간 형식 -->
+						<td>[[${#dates.format(board.updatedate, 'yyyy-MM-dd HH:mm:ss')}]]</td> <!-- HH : 24시간 형식 -->
+					</tr>
+				</table>
+			</div>
+		</th:block>
+	</th:block>
+</body>
+</html>

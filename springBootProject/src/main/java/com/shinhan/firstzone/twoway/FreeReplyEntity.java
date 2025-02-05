@@ -5,6 +5,8 @@ import java.sql.Timestamp;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -43,7 +45,8 @@ public class FreeReplyEntity {
 	
 	// 연관 관계? 여러 개의 댓글은 하나의 board를 참조한다.(board의 bno를 FK로 갖는다.)
 	// 칼럼은 1:n 관계에서 n 쪽에 만들어진다.
+	@JsonIgnore // Jackson이 JSON 생성 시 무시하기 즉, board 조회 시 댓글이 오고 댓글의 board는 제외
 	@ManyToOne(fetch = FetchType.LAZY)
-	private FreeBoardEntity board;
+	private FreeBoardEntity board; // 칼럼 이름은 board_bno
 
 }

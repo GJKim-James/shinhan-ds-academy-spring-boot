@@ -7,6 +7,8 @@ import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import io.micrometer.common.lang.NonNull;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -63,6 +65,7 @@ public class FreeBoardEntity {
 	@BatchSize(size = 100)
 	// mappedBy는 PDSBoardEntity.java의 @JoinColumn(name = "pdsno") 역할과 동일, 다만 양방향일 경우 mappedBy를 사용할 뿐.
 	@OneToMany(mappedBy = "board", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//	@JsonIgnore // Jackson이 JSON 생성 시 무시하기 즉, board 조회 시 댓글은 제외
 	List<FreeReplyEntity> replies;
 
 }

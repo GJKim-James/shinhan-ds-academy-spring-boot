@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>detail.html</title>
+</head>
+<body>
+	<th:block th:replace="~{/layout/basicLayout :: setContent(~{this::content2})}">
+		<th:block th:fragment="content2">
+			<form th:action="@{/webboard/update}" method="post">
+				<div class="container text-center">
+					<h1>Board 상세보기</h1>
+					<hr>
+					<div class="mb-3 row">
+						<label for="bno" class="col-sm-2 col-form-label">게시글 번호</label>
+					    <div class="col-sm-10">
+					      <input type="text" readonly class="form-control" name="bno" th:value="${board.bno}">
+					    </div>
+					</div>
+					<div class="mb-3 row">
+						<label for="writer" class="col-sm-2 col-form-label">작성자</label>
+					    <div class="col-sm-10">
+					      <input type="text" readonly class="form-control" name="writer" th:value="${board.writer.mname}">
+					      <input type="hidden" name="mid" th:value="${board.writer.mid}">
+					    </div>
+					</div>
+					<div class="mb-3 row">
+						<label for="title" class="col-sm-2 col-form-label">제목</label>
+					    <div class="col-sm-10">
+					      <input type="text" class="form-control" name="title" th:value="${board.title}">
+					    </div>
+					</div>
+					<div class="mb-3 row">
+						<label for="content" class="col-sm-2 col-form-label">내용</label>
+					    <div class="col-sm-10">
+					      <input type="text" class="form-control" name="content" th:value="${board.content}">
+					    </div>
+					</div>
+					<div class="mb-3 row">
+						<label for="regdate" class="col-sm-2 col-form-label">작성일</label>
+					    <div class="col-sm-10">
+					      <input type="text" readonly class="form-control" name="regdate" th:value="${board.regdate}">
+					    </div>
+					</div>
+					<div class="mb-3 row">
+						<label for="updatedate" class="col-sm-2 col-form-label">등록일</label>
+					    <div class="col-sm-10">
+					      <input type="text" readonly class="form-control" name="updatedate" th:value="${board.updatedate}">
+					    </div>
+					</div>
+					<div class="mb-3 row justify-content-end">
+						<a th:href="@{/webboard/list}" class="btn btn-primary mr-2">목록으로 이동</a>
+						<input type="submit" value="수정" class="btn btn-success">
+					</div>
+				</div>
+			</form>
+		</th:block>
+	</th:block>
+</body>
+</html>
