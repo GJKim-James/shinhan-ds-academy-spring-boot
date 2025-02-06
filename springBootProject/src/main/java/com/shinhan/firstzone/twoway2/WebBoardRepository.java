@@ -21,22 +21,19 @@ public interface WebBoardRepository extends JpaRepository<WebBoardEntity, Long>,
 		QWebBoardEntity board = QWebBoardEntity.webBoardEntity;
 		BooleanBuilder builder = new BooleanBuilder();
 		
-		builder.and(board.bno.goe(0)); // WHERE bno >= 0
+//		builder.and(board.bno.goe(0)); // WHERE bno >= 0
 		
 		if (type == null) {
 			return builder;
 		}
-		
-		switch (type) {
-		case "title" -> {
-			builder.and(board.title.contains(keyword));
+		if (type.contains("t")) {
+			builder.or(board.title.contains(keyword));
 		}
-		case "content" -> {
-			builder.and(board.content.contains(keyword));
+		if (type.contains("c")) {
+			builder.or(board.content.contains(keyword));
 		}
-		case "writer" -> {
-			builder.and(board.writer.mid.eq(keyword));
-		}
+		if (type.contains("w")) {
+			builder.or(board.writer.mid.eq(keyword));
 		}
 		
 		return builder;

@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.shinhan.firstzone.entity.MemberEntity;
+import com.shinhan.firstzone.paging.PageRequestDTO;
+import com.shinhan.firstzone.paging.PageResultDTO;
 import com.shinhan.firstzone.repository.MemberRepository;
 import com.shinhan.firstzone.twoway2.WebBoardDTO;
 import com.shinhan.firstzone.twoway2.WebBoardEntity;
@@ -31,6 +33,25 @@ public class WebBoardController {
 	@GetMapping("/list")
 	public void selectBoardAll(Model model) {
 		model.addAttribute("boardlist", boardService.selectBoardAll());
+	}
+	
+	// 페이징이 포함된 tbl_webboards 목록 조회
+	@GetMapping("/list2")
+	public String selectBoardAllPaging(Model model, PageRequestDTO pageRequestDTO) {
+		System.out.println("[pageRequestDTO] : " + pageRequestDTO); // PageRequestDTO(page=0, size=0, type=null, keyword=null)
+		
+		// 처음 조회했을 경우
+		if (pageRequestDTO.getPage() == 0) {
+			pageRequestDTO = new PageRequestDTO(1, 10);
+		}
+//		PageRequestDTO pageRequestDTO = new PageRequestDTO(1, 10, "tcw", "gjkim1");
+		
+		PageResultDTO<WebBoardDTO, WebBoardEntity> boardResult = boardService.selectBoardAllPaging(pageRequestDTO);
+		
+		model.addAttribute("boardResult", boardResult);
+		model.addAttribute("pageRequestDTO", pageRequestDTO);
+		
+		return "webboard/list2";
 	}
 	
 	// tbl_webboards 특정 게시글 상세보기(@RequestParam 이용)
@@ -65,7 +86,7 @@ public class WebBoardController {
 		
 		boardService.updateBoard(entity);
 		
-		return "redirect:list";
+		return "redirect:list2";
 	}
 	
 	// tbl_webboards에 등록하는 화면
@@ -86,7 +107,7 @@ public class WebBoardController {
 		
 		boardService.insertBoard(entity);
 		
-		return "redirect:list";
+		return "redirect:list2";
 	}
 
 }

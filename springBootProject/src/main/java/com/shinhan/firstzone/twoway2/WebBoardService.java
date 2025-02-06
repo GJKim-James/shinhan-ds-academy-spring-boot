@@ -1,14 +1,21 @@
 package com.shinhan.firstzone.twoway2;
 
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.querydsl.core.types.Predicate;
 import com.shinhan.firstzone.entity.MemberEntity;
+import com.shinhan.firstzone.paging.PageRequestDTO;
+import com.shinhan.firstzone.paging.PageResultDTO;
 
 @Service
 public class WebBoardService {
@@ -24,6 +31,21 @@ public class WebBoardService {
 		List<WebBoardDTO> boardDTOList = boardEntityList.stream().map(entity -> entityToDTO(entity)).collect(Collectors.toList());
 		
 		return boardDTOList;
+	}
+	
+	// 페이징, tbl_webboards 조건 조회
+	public PageResultDTO<WebBoardDTO, WebBoardEntity> selectBoardAllPaging(PageRequestDTO pageRequestDTO) {
+		Predicate predicate = boardRepo.makePredicate(pageRequestDTO.getType(), pageRequestDTO.getKeyword());
+		PageRequestDTO pageDTO = new PageRequestDTO(pageRequestDTO.getPage(), pageRequestDTO.getSize());
+		Pageable pageable = pageDTO.getPageable(Sort.by("bno").descending());
+		
+		Page<WebBoardEntity> boardResult = boardRepo.findAll(predicate, pageable);
+		
+		Function<WebBoardEntity, WebBoardDTO> function = entity -> entityToDTO(entity);
+		
+		PageResultDTO<WebBoardDTO, WebBoardEntity> result = new PageResultDTO<>(boardResult, function);
+		
+		return result;
 	}
 	
 	// 특정 bno의 상세보기

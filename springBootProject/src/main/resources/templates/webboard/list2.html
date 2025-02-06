@@ -9,7 +9,7 @@
 		<th:block th:fragment="content2">
 			<div class="container-fluid text-center">
 				<!-- 조건 추가 -->
-				<form action="/webboard/list2" method="get" id="searchForm">
+				<form th:action="@{/webboard/list2}" method="get" id="searchForm">
 					<div class="input-group">
 						<input type="text" name="page" value="1">
 						<input type="text" name="size" th:value="${pageRequestDTO.size}">
@@ -43,7 +43,7 @@
 						<td>수정일</td>
 						<td>댓글 수</td>
 					</tr>
-					<tr th:each="board:${boardlist}">
+					<tr th:each="board:${boardResult.dtoList}">
 						<td>
 							<a th:href="@{/webboard/detail(bno=${board.bno})}" th:text="'@RequestParam 이용 : ' + ${board.bno}"></a>
 							/
@@ -57,6 +57,19 @@
 						<td>[[${board.replyCount}]]</td>
 					</tr>
 				</table>
+				
+				<ul class="pagination h-100 justify-content-center align-items-center">
+					<li class="page-item" th:if="${boardResult.prev}">
+						<a class="page-link" th:href="@{/webboard/list2(page=${boardResult.start-1})}" tabindex="-1">Previos</a>
+					</li>
+					<li class="'page-item' + ${boardResult.page==page?'active':''}" th:each="page:${boardResult.pageList}">
+						<a class="page-link" th:href="@{/webboard/list2(page=${page},size=${pageRequestDTO.size},
+						type=${pageRequestDTO.type}, keyword=${pageRequestDTO.keyword})}" tabindex="-1">[[${page}]]</a>
+					</li>
+					<li class="page-item" th:if="${boardResult.next}">
+						<a class="page-link" th:href="@{/webboard/list2(page=${boardResult.end+1})}">Next</a>
+					</li>
+				</ul>
 			</div>
 		</th:block>
 	</th:block>

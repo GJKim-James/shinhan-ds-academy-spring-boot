@@ -7,60 +7,235 @@
 <body>
 	<th:block th:replace="~{/layout/basicLayout :: setContent(~{this::content2})}">
 		<th:block th:fragment="content2">
-			<form th:action="@{/webboard/update}" method="post">
 				<div class="container text-center">
 					<h1>Board 상세보기</h1>
 					<hr>
-					<div class="mb-3 row">
-						<label for="bno" class="col-sm-2 col-form-label">게시글 번호</label>
-					    <div class="col-sm-10">
-					      <input type="text" readonly class="form-control" name="bno" th:value="${board.bno}">
-					    </div>
+					<form th:action="@{/webboard/update}" method="post">
+						<div class="mb-3 row">
+							<label for="bno" class="col-sm-2 col-form-label">게시글 번호</label>
+						    <div class="col-sm-10">
+						      <input type="text" readonly class="form-control" name="bno" th:value="${board.bno}">
+						    </div>
+						</div>
+						<div class="mb-3 row">
+							<label for="mname" class="col-sm-2 col-form-label">작성자</label>
+						    <div class="col-sm-10">
+						      <input type="text" readonly class="form-control" name="mname" th:value="${board.mname}">
+						      <input type="hidden" name="mid" th:value="${board.mid}">
+						    </div>
+						</div>
+						<div class="mb-3 row">
+							<label for="title" class="col-sm-2 col-form-label">제목</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="title" th:value="${board.title}">
+						    </div>
+						</div>
+						<div class="mb-3 row">
+							<label for="content" class="col-sm-2 col-form-label">내용</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="content" th:value="${board.content}">
+						    </div>
+						</div>
+						<div class="mb-3 row">
+							<label for="regdate" class="col-sm-2 col-form-label">등록일</label>
+						    <div class="col-sm-10">
+						      <input type="text" readonly class="form-control" name="regdate" th:value="${board.regdate}">
+						    </div>
+						</div>
+						<div class="mb-3 row">
+							<label for="updatedate" class="col-sm-2 col-form-label">수정일</label>
+						    <div class="col-sm-10">
+						      <input type="text" readonly class="form-control" name="updatedate" th:value="${board.updatedate}">
+						    </div>
+						</div>
+						<div class="mb-3 row">
+							<label for="replyCount" class="col-sm-2 col-form-label">댓글 갯수</label>
+						    <div class="col-sm-10">
+						      <input type="text" readonly class="form-control" name="replyCount" th:value="${board.replyCount}">
+						    </div>
+						</div>
+						<div class="mb-3 row justify-content-end">
+							<a th:href="@{/webboard/list2}" class="btn btn-primary mr-2">목록으로 이동</a>
+							<input type="submit" value="수정" class="btn btn-success">
+						</div>
+					</form>
+					
+					<!-- 댓글 추가 -->
+					<div>
+						<div class="mt-4">
+							<h5>
+								<button type="button" class="btn btn-primary">
+									<span class="badge badge-light addReply">Add Reply</span>
+								</button>
+							</h5>
+							<h5>
+								<button type="button" class="btn btn-primary">
+									<span class="badge badge-light replyCount">Reply Count
+										: [[${board.replyCount}]]</span>
+								</button>
+							</h5>
+						</div>
+						<div class="list-group replyList">
+							<!-- 댓글 보여줄 영역 -->
+						</div>
 					</div>
-					<div class="mb-3 row">
-						<label for="mname" class="col-sm-2 col-form-label">작성자</label>
-					    <div class="col-sm-10">
-					      <input type="text" readonly class="form-control" name="mname" th:value="${board.mname}">
-					      <input type="hidden" name="mid" th:value="${board.mid}">
-					    </div>
-					</div>
-					<div class="mb-3 row">
-						<label for="title" class="col-sm-2 col-form-label">제목</label>
-					    <div class="col-sm-10">
-					      <input type="text" class="form-control" name="title" th:value="${board.title}">
-					    </div>
-					</div>
-					<div class="mb-3 row">
-						<label for="content" class="col-sm-2 col-form-label">내용</label>
-					    <div class="col-sm-10">
-					      <input type="text" class="form-control" name="content" th:value="${board.content}">
-					    </div>
-					</div>
-					<div class="mb-3 row">
-						<label for="regdate" class="col-sm-2 col-form-label">등록일</label>
-					    <div class="col-sm-10">
-					      <input type="text" readonly class="form-control" name="regdate" th:value="${board.regdate}">
-					    </div>
-					</div>
-					<div class="mb-3 row">
-						<label for="updatedate" class="col-sm-2 col-form-label">수정일</label>
-					    <div class="col-sm-10">
-					      <input type="text" readonly class="form-control" name="updatedate" th:value="${board.updatedate}">
-					    </div>
-					</div>
-					<div class="mb-3 row">
-						<label for="replyCount" class="col-sm-2 col-form-label">댓글 갯수</label>
-					    <div class="col-sm-10">
-					      <input type="text" readonly class="form-control" name="replyCount" th:value="${board.replyCount}">
-					    </div>
-					</div>
-					<div class="mb-3 row justify-content-end">
-						<a th:href="@{/webboard/list}" class="btn btn-primary mr-2">목록으로 이동</a>
-						<input type="submit" value="수정" class="btn btn-success">
+					
+					<!-- Modal : 댓글 추가하거나 상세보기에 이용할 예정 -->
+					<div class="modal" tabindex="-1" role="dialog">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title">등록/수정</h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body">
+									<div class="form-group">
+										<input class="form-control" type="text" name="replyText" placeholder="댓글" />
+										<input class="form-control" type="text" name="replier" placeholder="작성자" />
+										<input type="hidden" name="rno">
+										<input type="hidden" name="regdate">
+									</div>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-warning replyModify">수정</button>
+									<button type="button" class="btn btn-primary replySave">입력</button>
+									<button type="button" class="btn btn-danger replyRemove">삭제</button>
+									<button type="button" class="btn btn-outline-secondary replyClose" data-dismiss="modal">Close</button>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
-			</form>
 		</th:block>
 	</th:block>
+	
+	<script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+	<script th:inline="javascript">
+		// 400 요청 data 오류
+		// 404 page 주소 오류
+		// 405 요청 방식 오류(get, post, put)
+		// 500 서버 에러
+		
+		const bno = /*[[${board.bno}]]*/ 0;
+		const contextPath = /*[[${@environment.getProperty('server.servlet.context-path')}]]*/ "";
+		console.log("bno: " + bno);
+		console.log("contextPath: " + contextPath);
+		
+		$(function() {
+			$(".addReply").click(f_addReply);
+			$(".replyClose").click(f_replyClose);
+			$(".replyCount").click(f_replySelect);
+			$(".replySave").click(f_replyInsert);
+			
+			$(".replyList").on("click", ".card-body", f_replyModifyOpen); // 댓글 수정 모달 띄우기
+			$(".replyModify").click(f_replyUpdate);
+			
+			$("[data-dismiss]").click(f_replyClose); // data-dismiss(X) 속성이 존재하면 클릭 시 모달 닫기
+		});
+		
+		// 댓글 등록하는 모달 띄우기
+		function f_addReply() {
+			$("input[name='rno']").val("");
+			$("input[name='replyText']").val("");
+			$("input[name='replier']").val("");
+			
+			// 필요한 버튼만 보이게 설정
+			$(".modal-footer button").hide();
+			$(".replySave, .replyClose").show();
+			
+			$(".modal").show();
+		}
+		
+		// 모달 닫기
+		function f_replyClose() {
+			$(".modal").hide();
+		}
+		
+		// Ajax를 이용해서 Board의 댓글 가져오기
+		function f_replySelect() {
+			$.getJSON(`${contextPath}/replies/list/${bno}`, f_dataDisplay);
+		}
+		
+		// 댓글 보여주는 함수
+		function f_dataDisplay(replyList) {
+			console.log(replyList);
+			
+			var output = '';
+			$(".replyCount").html("Reply Count : " + replyList.length); // 댓글 수 최신화
+			$.each(replyList, function(index, reply){
+				// var dt = f_formatDate(reply.regdate);
+				// var dt2 = f_formatDate(reply.updatedate);
+				output += `
+					<div class='card card-body' data-rno='${reply.rno}' style="width: 18rem;">
+						<b>${reply.rno}</b>
+						<h5 class='card-title'>${reply.replyText}</h5>
+						<h5 class='card-subtitle mb-2 text-muted'>${reply.mid}</h5>
+						<p class='card-text mb-2 text-muted card-regdate'>등록일: ${reply.regdate} </p>
+						<p class='card-text mb-2 text-muted'>수정일: ${reply.updatedate} </p>
+					</div>
+				`;
+			});
+			
+			$(".replyList").html(output);
+		}
+		
+		// Ajax를 이용해서 Board의 댓글 입력하기
+		function f_replyInsert() {
+			let replyText = $('[name="replyText"]').val(); // 댓글
+			let mid = $('[name="replier"]').val(); // 작성자
+			
+			$.ajax({
+				url: `${contextPath}/replies/register`,
+				method: "post",
+				data: JSON.stringify({replyText, mid, boardBno:bno}), // {replyText:replyText, mid:mid, ...} 원래 이렇게 작성, 변수명과 DTO 필드명이 동일하면 한 번만 써도 무관
+				contentType: "application/json;charset=utf-8", // 보내는 데이터의 타입이 JSON
+				success: function(responseData) {
+					alert(responseData + "번 게시글 댓글 등록 성공!");
+					
+					$(".modal").hide(); // 모달 닫기
+					
+					f_replySelect(); // 댓글 다시 조회
+				}
+			});
+		}
+		
+		// 댓글 수정하는 모달 띄우기
+		function f_replyModifyOpen() {
+			$("input[name='rno']").val($(this).data("rno")); // .card-body의 data-rno를 rno에 넣기
+			$("input[name='replyText']").val($(this).find(".card-title").html()); // .card-body의 .card-title의 내용을 replyText에 넣기
+			$("input[name='replier']").val($(this).find(".card-subtitle").html()); // .card-body의 .card-subtitle의 내용을 replier에 넣기(hidden)
+			$("input[name='regdate']").val($(this).find(".card-regdate").html()); // .card-body의 .card-regdate의 내용을 regdate에 넣기(hidden)
+			
+			// 필요한 버튼만 보이게 설정
+			$(".modal-footer button").hide();
+			$(".replyModify, .replyRemove, .replyClose").show();
+			
+			$(".modal").show();
+		}
+		
+		// Ajax를 이용해서 Board의 댓글 수정하기
+		function f_replyUpdate() {
+			let rno = $('input[name="rno"]').val(); // 댓글 번호
+			let replyText = $('input[name="replyText"]').val(); // 댓글 내용
+			let mid = $('input[name="replier"]').val(); // 작성자
+			let regdate = $('input[name="regdate"]').val(); // 등록일
+						
+			$.ajax({
+				url: `${contextPath}/replies/update`,
+				method: "put",
+				data: JSON.stringify({replyText, mid, rno, boardBno:bno}), // 변수명과 DTO 필드명이 동일하면 한 번만 써도 무관
+				contentType: "application/json;charset=utf-8", // 보내는 데이터의 타입이 JSON
+				success: function(responseData) {
+					alert(responseData + "번 게시글의 댓글 수정 성공!");
+					
+					$(".modal").hide(); // 모달 닫기
+					
+					f_replySelect(); // 댓글 다시 조회
+				}
+			});
+		}
+	</script>
 </body>
 </html>
