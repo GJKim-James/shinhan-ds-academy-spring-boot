@@ -3,6 +3,7 @@ package com.shinhan.firstzone.twoway2;
 import java.sql.Timestamp;
 import java.util.List;
 
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -60,7 +61,7 @@ public class WebBoardEntity {
 	@UpdateTimestamp // 생성 시 생성일자, 수정 시 변경된다.
 	private Timestamp updatedate;
 
-	// @BatchSize(size = 100)
+	@BatchSize(size = 100)
 	@JsonIgnore
 	@OneToMany(mappedBy = "board", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	List<WebReplyEntity> replies;

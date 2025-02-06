@@ -18,10 +18,10 @@
 					    </div>
 					</div>
 					<div class="mb-3 row">
-						<label for="writer" class="col-sm-2 col-form-label">작성자</label>
+						<label for="mname" class="col-sm-2 col-form-label">작성자</label>
 					    <div class="col-sm-10">
-					      <input type="text" readonly class="form-control" name="writer" th:value="${board.writer.mname}">
-					      <input type="hidden" name="mid" th:value="${board.writer.mid}">
+					      <input type="text" readonly class="form-control" name="mname" th:value="${board.mname}">
+					      <input type="hidden" name="mid" th:value="${board.mid}">
 					    </div>
 					</div>
 					<div class="mb-3 row">
@@ -37,15 +37,21 @@
 					    </div>
 					</div>
 					<div class="mb-3 row">
-						<label for="regdate" class="col-sm-2 col-form-label">작성일</label>
+						<label for="regdate" class="col-sm-2 col-form-label">등록일</label>
 					    <div class="col-sm-10">
 					      <input type="text" readonly class="form-control" name="regdate" th:value="${board.regdate}">
 					    </div>
 					</div>
 					<div class="mb-3 row">
-						<label for="updatedate" class="col-sm-2 col-form-label">등록일</label>
+						<label for="updatedate" class="col-sm-2 col-form-label">수정일</label>
 					    <div class="col-sm-10">
 					      <input type="text" readonly class="form-control" name="updatedate" th:value="${board.updatedate}">
+					    </div>
+					</div>
+					<div class="mb-3 row">
+						<label for="replyCount" class="col-sm-2 col-form-label">댓글 갯수</label>
+					    <div class="col-sm-10">
+					      <input type="text" readonly class="form-control" name="replyCount" th:value="${board.replyCount}">
 					    </div>
 					</div>
 					<div class="mb-3 row justify-content-end">

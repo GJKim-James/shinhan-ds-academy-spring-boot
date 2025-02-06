@@ -1,7 +1,9 @@
 package com.shinhan.firstzone.twoway2;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +17,13 @@ public class WebBoardService {
 	WebBoardRepository boardRepo;
 	
 	// tbl_webboards 모두 조회
-	public List<WebBoardEntity> selectBoardAll() {
-		return boardRepo.findAll();
+	public List<WebBoardDTO> selectBoardAll() {
+		List<WebBoardEntity> boardEntityList = boardRepo.findAll();
+		
+		// Entity를 DTO로 변환
+		List<WebBoardDTO> boardDTOList = boardEntityList.stream().map(entity -> entityToDTO(entity)).collect(Collectors.toList());
+		
+		return boardDTOList;
 	}
 	
 	// 특정 bno의 상세보기
@@ -59,6 +66,53 @@ public class WebBoardService {
 	// tbl_webboards 모든 게시글 삭제
 	public void deleteBoardAll() {
 		boardRepo.deleteAll();
+	}
+	
+	// Entity를 DTO로 변환(Data 전송을 위함, controller, service, view에서 작업)
+	// 조회 시 사용
+	public WebBoardDTO entityToDTO(WebBoardEntity entity) {
+		// 방법1) ModelMapper 이용
+		ModelMapper mapper = new ModelMapper();
+		WebBoardDTO dto = mapper.map(entity, WebBoardDTO.class); // 이름이 같은 필드들은 자동으로 매핑
+		dto.setMid(entity.getWriter().getMid());
+		dto.setMname(entity.getWriter().getMname());
+		dto.setReplyCount(entity.getReplies().size());
+		
+		// 방법2) DTO의 builder 이용
+//		WebBoardDTO dto = WebBoardDTO.builder()
+//				.bno(entity.getBno())
+//				.title(entity.getTitle())
+//				.mid(entity.getWriter().getMid())
+//				.mname(entity.getWriter().getMname())
+//				.content(entity.getContent())
+//				.regdate(entity.getRegdate())
+//				.updatedate(entity.getUpdatedate())
+//				.replyCount(entity.getReplies().size())
+//				.build();
+		
+		return dto;
+	}
+	
+	// DTO를 Entity로 변환(DB에 반영하기 위함)
+	// insert, update 시 사용
+	public WebBoardEntity dtoToEntity(WebBoardDTO dto){
+		// 방법1) ModelMapper 이용
+		ModelMapper mapper = new ModelMapper();
+		WebBoardEntity entity = mapper.map(dto, WebBoardEntity.class);
+		MemberEntity member = MemberEntity.builder().mid(dto.getMid()).build();
+		entity.setWriter(member);
+		
+		// 방법2) Entity의 builder 이용
+//		MemberEntity member = MemberEntity.builder().mid(dto.getMid()).build();
+//		WebBoardEntity entity = WebBoardEntity.builder()
+//				.bno(dto.getBno())
+//				.title(dto.getTitle())
+//				.content(dto.getContent())
+//				.regdate(dto.getRegdate())					
+//				.writer(member)
+//				.build();
+		
+		return entity;
 	}
 
 }
