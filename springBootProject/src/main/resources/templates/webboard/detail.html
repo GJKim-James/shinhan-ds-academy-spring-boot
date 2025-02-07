@@ -56,7 +56,8 @@
 						</div>
 						<div class="mb-3 row justify-content-end">
 							<a th:href="@{/webboard/list2}" class="btn btn-primary mr-2">목록으로 이동</a>
-							<input type="submit" value="수정" class="btn btn-success">
+							<input type="submit" value="수정" class="btn btn-success mr-2">
+							<a th:href="@{/webboard/delete(bno=${board.bno})}" class="btn btn-danger">삭제</a>
 						</div>
 					</form>
 					
@@ -133,6 +134,8 @@
 			$(".replyModify").click(f_replyUpdate);
 			
 			$("[data-dismiss]").click(f_replyClose); // data-dismiss(X) 속성이 존재하면 클릭 시 모달 닫기
+			
+			$(".replyRemove").click(f_replyDelete); //DB정보삭제하기
 		});
 		
 		// 댓글 등록하는 모달 띄우기
@@ -233,6 +236,23 @@
 					$(".modal").hide(); // 모달 닫기
 					
 					f_replySelect(); // 댓글 다시 조회
+				}
+			});
+		}
+		
+		// 댓글 삭제
+		function f_replyDelete(){
+			var rno =  $("input[name='rno']").val();
+			
+			$.ajax({
+				url:`${contextPath}/replies/delete/${rno}`,
+				method:"delete",
+				success:function(responseData){
+					alert(responseData + "번 게시글의 댓글 삭제 성공");
+					
+					$(".modal").hide();
+					
+					f_replySelect(); //댓글 다시 조회
 				}
 			});
 		}

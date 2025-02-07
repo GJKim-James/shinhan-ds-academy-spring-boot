@@ -109,5 +109,13 @@ public class WebBoardController {
 		
 		return "redirect:list2";
 	}
+	
+	// 게시글 삭제
+	@GetMapping("/delete")
+	public String deleteBoard(Long bno) {
+		boardService.deleteBoardByBno(bno);
+		
+		return "redirect:list2";
+	}
 
 }

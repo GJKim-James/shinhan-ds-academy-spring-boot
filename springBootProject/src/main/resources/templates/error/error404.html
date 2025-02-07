@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<meta charset="UTF-8">
+<title>error404.html</title>
+</head>
+</head>
+<body>
+	<th:block th:replace="~{/layout/basicLayout :: setContent(~{this::content3})}">
+		<th:block th:fragment="content3">
+			<div>
+				<img th:src="@{/assets/404error.png}" />
+				<h1>★★★서버에서 보낸 메시지★★★</h1>
+				<h2>인라인 방법:[[${msg}]]</h2>
+				<p th:text="${msg}">tag 속성 사용 방법</p>
+				<h2 id="here"></h2>
+			</div>
+		</th:block>
+	</th:block>
+	
+	<script>
+		here.innerHTML = "입력주소 확인:" + location.href;
+	</script>
+</body>
+</html>

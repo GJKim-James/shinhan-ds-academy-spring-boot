@@ -3,6 +3,7 @@ package com.shinhan.firstzone.restcontroller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,6 +49,14 @@ public class WebReplyRestController {
 		WebReplyDTO updatedReplyDTO = replyService.updateReply(dto);
 		
 		return updatedReplyDTO.getRno();
+	}
+	
+	// 댓글 삭제
+	@DeleteMapping(value = "/delete/{rno}")
+	public Long delete(@PathVariable Long rno) {
+		replyService.deleteReplyByRno(rno);
+		
+		return rno;
 	}
 
 }
