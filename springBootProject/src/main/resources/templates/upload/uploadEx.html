@@ -33,6 +33,9 @@
 	        //upload ajax
 	        $.ajax({
 	            url: 'uploadAjax',
+	            // processData?
+	            // true : 기본값, data 속성 값이 콘텐츠 타입에 맞게 쿼리 문자열로 처리.
+	            // false : 처리되지 않은 데이터를 보냄을 의미
 	            processData: false,
 	            // contentType?
 	            // ajax를 통해서 서버에 데이터를 보낼 때 데이터 유형을 결정
