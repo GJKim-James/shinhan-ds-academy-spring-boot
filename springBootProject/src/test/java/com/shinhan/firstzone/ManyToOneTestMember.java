@@ -6,6 +6,7 @@ import java.util.stream.IntStream;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.querydsl.core.BooleanBuilder;
 import com.shinhan.firstzone.entity.MemberEntity;
@@ -19,13 +20,16 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @SpringBootTest
-public class ManyToOneTest {
+public class ManyToOneTestMember {
 	
 	@Autowired
 	MemberRepository memberRepository;
 	
 	@Autowired
 	ProfileRepository profileRepository;
+	
+	@Autowired
+	PasswordEncoder passwordEncoder;
 	
 //	@Test
 	public void memberInsert() {
@@ -157,9 +161,33 @@ public class ManyToOneTest {
 	}
 	
 	// Member를 통해서 Profile에 접근하기(member가 몇 개의 profile을 가지고 있는지 조회하기)
-	@Test
+//	@Test
 	public void getMemberWithProfileCount() {
 		memberRepository.getMemberWithProfileCount("kim").forEach(arr -> log.info(Arrays.toString(arr)));;
+	}
+	
+	// Spring Security 암호화 테스트를 위한 멤버 등록
+//	@Test
+	public void insertMember() {
+		MemberEntity member = MemberEntity.builder()
+				.mid("manager1")
+				.mpassword(passwordEncoder.encode("1234")) // 암호화
+				.mname("매니저1")
+				.mrole(MemberRole.MANAGER)
+				.build();
+		
+		memberRepository.save(member);
+	}
+	
+	// 기존 멤버의 비밀번호 암호화
+	@Test
+	public void updateMember() {
+		memberRepository.findById("gjkim9").ifPresent(member -> {
+			member.setMpassword(passwordEncoder.encode("1234"));
+			member.setMrole(MemberRole.USER);
+			
+			memberRepository.save(member);
+		});
 	}
 	
 }

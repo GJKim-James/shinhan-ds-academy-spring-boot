@@ -119,6 +119,20 @@
 		// 405 요청 방식 오류(get, post, put)
 		// 500 서버 에러
 		
+		// csrf 토큰
+		var token = $("meta[name='_csrf']").attr("content"); // basicLayout.html에서 <meta> 선언
+		var header = $("meta[name='_csrf_header']").attr("content"); // basicLayout.html에서 <meta> 선언
+		var beforeSend = function(xhr) {
+			xhr.setRequestHeader(header, token);
+		}
+		function ajax_send() {
+			if(token && header) {
+				$(document).ajaxSend(function(event, xhr, options) {
+					xhr.setRequestHeader(header, token);
+				});
+			}
+		}
+		
 		const bno = /*[[${board.bno}]]*/ 0;
 		const contextPath = /*[[${@environment.getProperty('server.servlet.context-path')}]]*/ "";
 		console.log("bno: " + bno);
@@ -158,6 +172,7 @@
 		
 		// Ajax를 이용해서 Board의 댓글 가져오기
 		function f_replySelect() {
+			// ajax.send(); // csrf 토큰
 			$.getJSON(`${contextPath}/replies/list/${bno}`, f_dataDisplay);
 		}
 		
@@ -190,6 +205,7 @@
 			let mid = $('[name="replier"]').val(); // 작성자
 			
 			$.ajax({
+				beforeSend, // csrf 토큰
 				url: `${contextPath}/replies/register`,
 				method: "post",
 				data: JSON.stringify({replyText, mid, boardBno:bno}), // {replyText:replyText, mid:mid, ...} 원래 이렇게 작성, 변수명과 DTO 필드명이 동일하면 한 번만 써도 무관
@@ -226,6 +242,7 @@
 			let regdate = $('input[name="regdate"]').val(); // 등록일
 						
 			$.ajax({
+				beforeSend, // csrf 토큰
 				url: `${contextPath}/replies/update`,
 				method: "put",
 				data: JSON.stringify({replyText, mid, rno, boardBno:bno}), // 변수명과 DTO 필드명이 동일하면 한 번만 써도 무관

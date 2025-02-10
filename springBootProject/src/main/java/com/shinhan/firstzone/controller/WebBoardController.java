@@ -1,6 +1,11 @@
 package com.shinhan.firstzone.controller;
 
+import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -97,14 +102,29 @@ public class WebBoardController {
 	
 	// tbl_webboards에 등록
 	@PostMapping("/register")
-	public String insertBoard(WebBoardDTO board, HttpSession session) {
-//		MemberEntity member = (MemberEntity) session.getAttribute("loginMember");
+	public String insertBoard(WebBoardDTO board, Principal principal, Authentication authentication, HttpSession session) {
+		// 1. Principal
+		String a = principal.getName();
+		System.out.println("1. Principal : " + a);
 		
-		String mid = "gjkim1"; // 나중에 login member의 id로 변경 예정
+		// 2. Authentication
+		UserDetails user = (UserDetails) authentication.getPrincipal();
+		String b = user.getUsername();
+		System.out.println("2. Authentication : " + b);
+		
+		// 3. SecurityContextHolder
+		UserDetails user2 = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String c = user2.getUsername();
+		System.out.println("3. SecurityContextHolder : " + c);
+		
+		// 4. HttpSession
+//		String mid = "gjkim1"; // Spring Security 추가하여 주석으로 변경
+		MemberEntity member = (MemberEntity) session.getAttribute("loginMember");
+		String mid = member.getMid();
+		System.out.println("4. HttpSession : " + mid);
+		
 		board.setMid(mid);
-		
 		WebBoardEntity entity = boardService.dtoToEntity(board);
-		
 		boardService.insertBoard(entity);
 		
 		return "redirect:list2";
