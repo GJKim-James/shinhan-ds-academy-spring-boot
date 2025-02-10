@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h1>Member의 Profile등록</h1>
+	<input name="uploadFiles" type="file" multiple>
+	<input type="text" name="writer" value="gjkim1">
+	<button class="uploadBtn">Upload</button>
+	<hr>
+	
+	<h2>Upload 결과 보여주기</h2>
+	<div class="uploadResult">여기</div>
+
+	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+	<script>
+		$('.uploadBtn').click(f_upload);
+		
+	    function f_upload() {
+	        var formData = new FormData();
+	        var inputFile = $("input[type='file']");
+	        var files = inputFile[0].files;
+	        
+	        for (var i = 0; i < files.length; i++) {
+	            console.log(files[i]);
+	            formData.append("uploadFiles", files[i]);
+	        }
+	        
+	        formData.append("mid", $("input[name='writer']").val());
+	        
+	        //upload ajax
+	        $.ajax({
+	            url: 'uploadAjax',
+	            processData: false,
+	            // contentType?
+	            // ajax를 통해서 서버에 데이터를 보낼 때 데이터 유형을 결정
+	            // 기본값 : 'application/x-www-form-urlencoded; charset=UTF-8'
+	            // jQuery 1.6부터 false이면 요청 헤더에 콘텐츠 타입 설정 안함을 의미.
+	            contentType: false,
+	            data: formData,
+	            type: 'POST',
+	            dataType:'json',
+	            success: function(result){console.log(result);                
+	                showUploadedImages(result); // 나중에 화면 처리
+	            },
+	            error: function(jqXHR, textStatus, errorThrown){
+	                console.log(textStatus);
+	            }
+	        });  
+	    };  
+	
+	    function showUploadedImages(arr) {
+	    	console.log("________________");
+	        console.log(arr);
+	        
+	        var divArea = $(".uploadResult");
+	        var str = "";
+	        for(var i = 0; i < arr.length; i++){
+	        	console.log(arr[i].thumbnailURL);
+	        	
+	            str += "<div>";
+	            str += "<img src='/shinhan/display?fileName="+arr[i].thumbnailURL+"'>";
+	            str += "<button class='removeBtn' data-name='"+arr[i].imageURL +"'>REMOVE</button>"
+	            str += "</div>";
+	        }
+	        divArea.append(str);
+	    }
+	
+	    $(".uploadResult").on("click", ".removeBtn", function(e) {
+	        var target = $(this); // removeBtn
+	        var fileName = target.data("name"); // data-name
+	        var targetDiv = $(this).closest("div");
+	        console.log(fileName);
+	        
+	        $.post('/shinhan/removeFile', {fileName: fileName}, function(result) {
+	            console.log(result);
+	            if(result === true){
+	                targetDiv.remove(); // Browser에서 지우기
+	            }
+	        })
+	    });
+	</script>
+</body>
+</html>
