@@ -16,14 +16,19 @@ import com.shinhan.firstzone.twoway2.WebBoardEntity;
 import com.shinhan.firstzone.twoway2.WebReplyDTO;
 import com.shinhan.firstzone.twoway2.WebReplyService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/replies")
+@Tag(name="Reply API") // http://localhost:7777/shinhan/swagger-ui/index.html로 접근하면 Swagger UI 확인 가능
 public class WebReplyRestController {
 	
 	@Autowired
 	WebReplyService replyService;
 	
 	// 특정 board의 reply 정보 조회
+	@Operation(summary = "댓글 조회", description = "댓글 조회 시 Board 번호가 필수") // Swagger API
 	@GetMapping("/list/{bno}")
 	public List<WebReplyDTO> selectRepliesByBoard(@PathVariable Long bno) {
 		WebBoardEntity board = WebBoardEntity.builder().bno(bno).build();

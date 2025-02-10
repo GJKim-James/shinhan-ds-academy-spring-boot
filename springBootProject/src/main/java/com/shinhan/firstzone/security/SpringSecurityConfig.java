@@ -24,7 +24,7 @@ public class SpringSecurityConfig {
 	private static final String[] MANAGER_LIST = {"/security/manager"};
 	private static final String[] ADMIN_LIST = {"/security/admin"};
 	private static final String[] USER_LIST = {"/security/user", "/webboard/*"};
-	private static final String[] WHITE_LIST = {"/security/all", "/auth/*"};
+	private static final String[] WHITE_LIST = {"/security/all", "/auth/*", "/v3/**", "/swagger-ui/**"};
 	
 	@Bean
 	public SecurityFilterChain filterChain2(HttpSecurity http) throws Exception {
