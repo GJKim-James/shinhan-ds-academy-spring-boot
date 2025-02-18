@@ -23,8 +23,8 @@ public class SpringSecurityConfig {
 	private static final String[] MANAGER_LIST = {"/security/manager"};
 	private static final String[] ADMIN_LIST = {"/security/admin"};
 	private static final String[] USER_LIST = {"/security/user", "/webboard/*"};
-	// "/api/webboard/**", "/replies/**" : 2025-02-18 추가(React와 연동하기 위한 작업)
-	private static final String[] WHITE_LIST = {"/security/all", "/auth/*", "/v3/**", "/swagger-ui/**", "/api/webboard/**", "/replies/**"};
+	// "/api/webboard/**", "/replies/**", "/emp/**" : 2025-02-18 추가(React와 연동하기 위한 작업)
+	private static final String[] WHITE_LIST = {"/security/all", "/auth/*", "/v3/**", "/swagger-ui/**", "/api/webboard/**", "/replies/**", "/emp/**"};
 	
 	@Bean
 	public SecurityFilterChain filterChain2(HttpSecurity http) throws Exception {

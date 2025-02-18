@@ -66,7 +66,10 @@ public class EmpService {
 		
 		dto.setJob_id(entity.getJob() == null ? null : entity.getJob().getJob_id());
 		dto.setManager_id(entity.getManager() == null ? null : entity.getManager().getEmployee_id());
-		dto.setDepartment_id(entity.getDept() == null ? null : entity.getDept().getDepartment_id());
+		if (entity.getDept() != null) {
+			dto.setDepartment_id(entity.getDept().getDepartment_id());
+			dto.setDepartment_name(entity.getDept().getDepartment_name());
+		}
 		
 		return dto;
 	}
