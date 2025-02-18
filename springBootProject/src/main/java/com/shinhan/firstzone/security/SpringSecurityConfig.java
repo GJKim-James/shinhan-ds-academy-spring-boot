@@ -6,7 +6,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 //SpringBoot 3.4.1 버전 사용 중
 // @Configuration, @EnableWebSecurity, @Bean : application 시작 시 해석함
@@ -24,7 +23,8 @@ public class SpringSecurityConfig {
 	private static final String[] MANAGER_LIST = {"/security/manager"};
 	private static final String[] ADMIN_LIST = {"/security/admin"};
 	private static final String[] USER_LIST = {"/security/user", "/webboard/*"};
-	private static final String[] WHITE_LIST = {"/security/all", "/auth/*", "/v3/**", "/swagger-ui/**"};
+	// "/api/webboard/**", "/replies/**" : 2025-02-18 추가(React와 연동하기 위한 작업)
+	private static final String[] WHITE_LIST = {"/security/all", "/auth/*", "/v3/**", "/swagger-ui/**", "/api/webboard/**", "/replies/**"};
 	
 	@Bean
 	public SecurityFilterChain filterChain2(HttpSecurity http) throws Exception {
@@ -42,23 +42,24 @@ public class SpringSecurityConfig {
 		});
 		
 		// http.csrf().disable(); disable이 아니면 post, put, delete 방식의 요청 시 반드시 csrf 토큰을 가지고 요청해야한다.
-//		http.csrf(c -> c.disable()); // default는 csrf가 enabled(활성화)
+		// 조회는 csrf 토큰 없어도 됨, DB에 영향을 주는 입력, 수정, 삭제는 토큰 필요
+		http.csrf(c -> c.disable()); // default는 csrf가 enabled(활성화)
 		
-		// 로그인하는 화면(username은 mid로 받음, 로그인 성공 시 /auth/loginSuccess)
-		http.formLogin(login -> {
-			login.loginPage("/auth/login").usernameParameter("mid").defaultSuccessUrl("/auth/loginSuccess").permitAll();
-		});
-		
-		// 로그아웃
-		http.logout(out -> {
-			out.logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout")).logoutSuccessUrl("/auth/login")
-			.invalidateHttpSession(true);
-		});
-		
-		// 예외 처리
-		http.exceptionHandling(handling -> {
-			handling.accessDeniedPage("/auth/accessDenied");
-		});
+//		// 로그인하는 화면(username은 mid로 받음, 로그인 성공 시 /auth/loginSuccess)
+//		http.formLogin(login -> {
+//			login.loginPage("/auth/login").usernameParameter("mid").defaultSuccessUrl("/auth/loginSuccess").permitAll();
+//		});
+//		
+//		// 로그아웃
+//		http.logout(out -> {
+//			out.logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout")).logoutSuccessUrl("/auth/login")
+//			.invalidateHttpSession(true);
+//		});
+//		
+//		// 예외 처리
+//		http.exceptionHandling(handling -> {
+//			handling.accessDeniedPage("/auth/accessDenied");
+//		});
 		
 		return http.build();
 	}
