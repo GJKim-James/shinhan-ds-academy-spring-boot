@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.shinhan.firstzone.paging.PageRequestDTO;
 import com.shinhan.firstzone.paging.PageResultDTO;
+import com.shinhan.firstzone.twoway2.ResponseDTO;
 import com.shinhan.firstzone.twoway2.WebBoardDTO;
 import com.shinhan.firstzone.twoway2.WebBoardEntity;
 import com.shinhan.firstzone.twoway2.WebBoardService;
@@ -60,30 +61,45 @@ public class WebBoardRestController {
 	
 	// tbl_webboards 수정
 	@PutMapping("/update")
-	public String updateBoard(@RequestBody WebBoardDTO board) {
+	public ResponseDTO updateBoard(@RequestBody WebBoardDTO board) {
 		// DTO를 Entity로 변환
 		WebBoardEntity entity = boardService.dtoToEntity(board);
 		
 		boardService.updateBoard(entity);
 		
-		return "게시글 수정 성공!";
+		ResponseDTO responseDTO = ResponseDTO.builder()
+				.job("/api/webboard/update")
+				.message("게시글 수정 성공!")
+				.build();
+		
+		return responseDTO;
 	}
 	
 	// tbl_webboards에 등록
 	@PostMapping("/register")
-	public String insertBoard(@RequestBody WebBoardDTO board) {
+	public ResponseDTO insertBoard(@RequestBody WebBoardDTO board) {
 		WebBoardEntity entity = boardService.dtoToEntity(board);
 		boardService.insertBoard(entity);
 		
-		return "게시글 등록 성공!";
+		ResponseDTO responseDTO = ResponseDTO.builder()
+				.job("/api/webboard/register")
+				.message("게시글 등록 성공!")
+				.build();
+		
+		return responseDTO;
 	}
 	
 	// 게시글 삭제
 	@DeleteMapping("/delete/{bno}")
-	public String deleteBoard(@PathVariable Long bno) {
+	public ResponseDTO deleteBoard(@PathVariable Long bno) {
 		boardService.deleteBoardByBno(bno);
 		
-		return "게시글 삭제 성공!";
+		ResponseDTO responseDTO = ResponseDTO.builder()
+				.job("/api/webboard/delete/{bno}")
+				.message("게시글 삭제 성공!")
+				.build();
+		
+		return responseDTO;
 	}
 
 }
